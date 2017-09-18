@@ -11,23 +11,49 @@
 
 #include "stm32f0xx.h"
 #include "stm32f0_discovery.h"
+#include "pins.h"
 
-GPIO_InitTypeDef gpio;
+void setup(void);
 
-// LEDS
-#define GREEN_LED GPIO_Pin_9
-#define BLUE_LED GPIO_Pin_8
-#define LED_GPIO GPIOC
-
+/*
+ * For this first version, we are going to play with the USER LEDs:
+ * - Green LED (LD3): PC9
+ * - Blue LED (LD4): PC8
+ */
+GPIO_InitTypeDef Pin_Green;
+GPIO_InitTypeDef Pin_Blue;
 
 int main(void){
+	setup();
+
+	while (1) {
+		// Blue
+		GPIO_SetBits(LED4_GPIO_PORT, LED4_PIN);
+		sleepMilis(500);
+		GPIO_ResetBits(LED4_GPIO_PORT, LED4_PIN);
+		// Green
+		GPIO_SetBits(LED3_GPIO_PORT, LED3_PIN);
+		sleepMilis(500);
+		GPIO_ResetBits(LED3_GPIO_PORT, LED3_PIN);
+	}
+}
+
+void SysTick_Handler() {
+	t_miliseconds++;
+	if (t_miliseconds % 1000 == 999) {
+		t_seconds++;
+	}
+}
+
+void setup() {
+	SystemInit();
+	SystemCoreClockUpdate();
+	SysTick_Config(SystemCoreClock / MilisecondsIT);
+
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
+	t_miliseconds = t_seconds = 0;
 
-	gpio.GPIO_Pin = GREEN_LED | BLUE_LED;
-	gpio.GPIO_Mode = GPIO_Mode_OUT;
-	gpio.GPIO_OType = GPIO_OType_PP;
-	gpio.GPIO_PuPd = GPIO_PuPd_NOPULL;
-	gpio.GPIO_Speed = GPIO_Speed_Level_1;
-	GPIO_Init(LED_GPIO, &gpio);
+	pinSetup(Pin_Green, LED3_PIN, GPIO_Mode_OUT, GPIO_Speed_2MHz, GPIO_OType_PP, GPIO_PuPd_UP, LED3_GPIO_PORT);
+	pinSetup(Pin_Blue, LED4_PIN, GPIO_Mode_OUT, GPIO_Speed_2MHz, GPIO_OType_PP, GPIO_PuPd_UP, LED4_GPIO_PORT);
 }
