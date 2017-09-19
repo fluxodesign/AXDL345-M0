@@ -12,6 +12,7 @@
 #include "stm32f0xx.h"
 #include "stm32f0_discovery.h"
 #include "pins.h"
+#include "serial.h"
 
 void setup(void);
 
@@ -56,4 +57,5 @@ void setup() {
 
 	pinSetup(Pin_Green, LED3_PIN, GPIO_Mode_OUT, GPIO_Speed_2MHz, GPIO_OType_PP, GPIO_PuPd_UP, LED3_GPIO_PORT);
 	pinSetup(Pin_Blue, LED4_PIN, GPIO_Mode_OUT, GPIO_Speed_2MHz, GPIO_OType_PP, GPIO_PuPd_UP, LED4_GPIO_PORT);
+	setupSerial();
 }
