@@ -7,7 +7,7 @@
 
 #include "serial.h"
 
-uint32_t baudRate = 115200;
+uint32_t baudRate = 9600;
 uint32_t baudRates[] = { 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 250000, 230400, 460800, 921600 };
 
 void setupSerial() {
