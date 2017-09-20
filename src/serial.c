@@ -35,14 +35,12 @@ void setBaudRates(uint32_t value) {
 }
 
 uint8_t getByteSync(USART_TypeDef *usartTD) {
-	while (USART_GetFlagStatus(usartTD, USART_FLAG_RXNE) == RESET) {
-	}
+	while (USART_GetFlagStatus(usartTD, USART_FLAG_RXNE) == RESET);
 	return USART_ReceiveData(usartTD);
 }
 
 void sendByteSync(USART_TypeDef *usartTD, uint8_t byte) {
-	while (USART_GetFlagStatus(usartTD, USART_FLAG_TXE) == RESET) {
-	}
+	while (USART_GetFlagStatus(usartTD, USART_FLAG_TXE) == RESET);
 	USART_SendData(usartTD, byte);
 }
 
